@@ -1,0 +1,1 @@
+So far covered sorting algorithms, going into dynamic programming
