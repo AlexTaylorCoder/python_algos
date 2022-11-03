@@ -5,8 +5,8 @@
 #Seems like recursive solution is optimal
 
 def quicksort(a):
-        print(a)
-        length = len(a)        
+        length = len(a)      
+        print(length)  
         if length <= 1:
             return a
         pivot = a.pop()
