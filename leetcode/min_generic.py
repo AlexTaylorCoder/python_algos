@@ -13,28 +13,22 @@
 #Recursive solution seems optimal
 
 #How many steps to get to closest value of bank
-def min_mutation(start,end,bank):
-    count = 0
-    contains_prev = -1
-    for i in range(len(start)+1):
-        contains_index = bank_contains(start[:i],bank)
-        if contains_index == -1:
-            count += 1
-            start = start[:i-1] + bank[contains_prev][i-1:i] + start[i:]
-        contains_prev = contains_index
-    return count 
-
-
-def bank_contains(substring,bank):
-    for i, s in enumerate(bank):
-        if substring in s:
-            return i
+def minMutation(self, start: str, end: str, bank: List[str]) -> int:
+    queue = deque([(start,0)])
+    visited = set(start)
+    while queue:
+        current, dist = queue.popleft()
+        if current == end:
+            return dist
+        #Need logic to see if gene one letter away 
+        for c in "ACGT":
+            for i in range(len(current)):
+                neighbor = current[:i] + c + current[i+1:]
+                if neighbor not in visited and neighbor in bank:
+                    visited.add(current)
+                    queue.append((current,dist+1))
     return -1
-
-#
-def check_count(start,end,bank):
-    for i in range(len(bank)):
-        print(min_mutation(start,bank[i],bank))
+            
 
 #Maybe find differing chars?
 print(check_count(start = "AACCGGTT", end = "AACCGGTA", bank = ["AACCGGTA"]))
