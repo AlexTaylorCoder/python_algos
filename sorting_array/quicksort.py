@@ -6,7 +6,6 @@
 
 def quicksort(a):
         length = len(a)      
-        print(length)  
         if length <= 1:
             return a
         pivot = a.pop()
@@ -19,7 +18,7 @@ def quicksort(a):
             #Add to left
             else:
                 items_lesser.append(a[n])
-
+        print(items_greater,items_lesser)
         return quicksort(items_lesser) + [pivot] + quicksort(items_greater)
         
 
