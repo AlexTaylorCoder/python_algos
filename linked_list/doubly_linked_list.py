@@ -80,10 +80,10 @@ class LinkedList():
         self.add_length()
         return self._head.next
     def append(self,val):
-        node = self.get(self._length-1)
-        node.next = Node(val)
-        node.next.prev = node
-        self._tail = node.next
+        last = self._tail
+        last.next = Node(val)
+        last.next.prev = last
+        self._tail = last.next
         self.add_length()
     def remove(self,val):    
         node = self.find(val)
@@ -150,11 +150,14 @@ linkedlist2 = LinkedList(4)
 
 linkedlist.prepend(4)
 linkedlist.append(6)
-linkedlist.append(6)
-linkedlist.add_node(2,5)
-linkedlist.add_node(2,5)
+
+linkedlist.add_node(1,5)
+linkedlist.add_node(3,5)
 linkedlist.swap(2,7)
+linkedlist.append(6)
+
 print(linkedlist)
+print(linkedlist.reverse())
 linkedlist.remove(7)
 print(linkedlist.find(7))
 # print(linkedlist.get(3).prev)
