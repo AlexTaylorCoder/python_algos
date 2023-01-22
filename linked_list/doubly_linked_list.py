@@ -9,8 +9,9 @@ class Node():
 class LinkedList():
 
     def __init__(self,val):
-        self._head = Node(val)
-        self._tail = Node(val)
+        node = Node(val)
+        self._head = node
+        self._tail = node
         self._length = 1
     def get(self,index):
         if self.check_index(index) == 0:
@@ -155,6 +156,6 @@ linkedlist.add_node(2,5)
 linkedlist.swap(2,7)
 print(linkedlist)
 linkedlist.remove(7)
-(linkedlist.find(7)
-)# print(linkedlist.get(3).prev)
+print(linkedlist.find(7))
+# print(linkedlist.get(3).prev)
 # print(linkedlist.length)
