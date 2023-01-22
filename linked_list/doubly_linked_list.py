@@ -20,29 +20,35 @@ class LinkedList():
             for _ in range(index):
                 cur = cur.next
             return cur
-    def remove(self,index):
+    def pop(self,index):
         if self._length < 1:
             return "Nothing to delete, the linked list is empty"
         elif self.check_index(index) == 1:
-            self.remove_first()
+            return self.remove_first()
         elif self.check_index(index) == -1:
-            self.remove_last()
+            return self.remove_last()
         elif self.check_index(index) == 0:
             return "Deleting at invalid position"
         else:
             node = self.prev_node(index)
-            node.next = node.next.next 
-            node.next.prev = node
-            self.remove_length()
+            return self.__removal(node)
+
+    def __removal(self,node):
+        node.next = node.next.next 
+        node.next.prev = node
+        self.remove_length()
+        return node.next
     def remove_first(self):
         nextNode = self._head.next
         self._head = nextNode
         self.remove_length()
+        return self._head
     def remove_last(self):
         temp = self._tail.prev
         self._tail.prev.next = None
         self._tail = temp
         self.remove_length()
+        return self._tail
     def add_node(self,index,val):
         if self.check_index(index) == 1:
             self.prepend(val)
@@ -78,6 +84,24 @@ class LinkedList():
         node.next.prev = node
         self._tail = node.next
         self.add_length()
+    def remove(self,val):    
+        node = self.find(val)
+        if node:
+            self.__removal(node[1].prev)
+
+            return node[0]
+        else:
+            return "Value not found"
+        
+    def find(self,val):
+        cur = self._head
+        count = 0
+        while cur:
+            if cur.val == val:
+                return count, cur
+            cur = cur.next 
+            count += 1
+        return False
     def prev_node(self,index):
         return self.get(index-1)
     def add_length(self):
@@ -101,6 +125,9 @@ class LinkedList():
             parts.append(str(cur.val))
             cur = cur.prev
         return " , ".join(parts)
+    def swap(self,index,val):
+        node = self.get(index)
+        node.val = val
     def __delattr__(self):
         del self._head
         del self._tail
@@ -119,15 +146,15 @@ class LinkedList():
 linkedlist = LinkedList(2)
 linkedlist2 = LinkedList(4)
 
-print(linkedlist == linkedlist2)
-
 
 linkedlist.prepend(4)
 linkedlist.append(6)
 linkedlist.append(6)
 linkedlist.add_node(2,5)
-
-linkedlist.remove(4)
-
-# print(linkedlist.get(3).prev)
+linkedlist.add_node(2,5)
+linkedlist.swap(2,7)
+print(linkedlist)
+linkedlist.remove(7)
+(linkedlist.find(7)
+)# print(linkedlist.get(3).prev)
 # print(linkedlist.length)
