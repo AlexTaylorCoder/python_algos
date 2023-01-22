@@ -1,45 +1,117 @@
-#To reverse doubly linked list just swap prev and next refs
-def doubly_linked_list(head):
-    if head is None:
-        return None
-        
-    temp = head.next 
-    head.next = head.prev
-    head.prev = temp
-
-    if head.prev is None:
-        return None
-    return doubly_linked_list(head.prev)
-
-
-class Node:
+class Node():
     def __init__(self,val):
-        self.val = val
         self.next = None
-        self.prev = None
+        self.prev = None 
+        self.val = val
+    def __str__(self):
+        return str(self.val)
 
+class LinkedList():
+    def __init__(self,val):
+        self.head = Node(val)
+        self.tail = Node(val)
+        self.length = 1
+    def get(self,index):
+        if self.check_index(index) == 0:
+            return "Searching at invalid position"
+        else:
+            cur = self.head
+            for _ in range(index):
+                cur = cur.next
+            return cur
+    def remove(self,index):
+        if self.check_index(index) == 1:
+            self.remove_first()
+        elif self.check_index(index) == -1:
+            self.remove_last()
+        elif self.check_index(index) == 0:
+            return "Deleting at invalid position"
+        else:
+            node = self.prev_node(index)
+            node.next = node.next.next 
+            node.next.prev = node
+            self.remove_length()
+    def remove_first(self):
+        nextNode = self.head.next
+        self.head = nextNode
+        self.remove_length()
+    def remove_last(self):
+        temp = self.tail.prev
+        self.tail.prev.next = None
+        self.tail = temp
+        self.remove_length()
+    def add_node(self,index,val):
+        if self.check_index(index) == 1:
+            self.prepend(val)
+        elif self.check_index(index) == -1:
+            self.append(val)
+        elif self.check_index(index) == 0:
+            return "Inserting at invalid position"
+        else:
+            node = self.prev_node(index)
+            temp = node.next
+            node.next = Node(val)
+            node.next.prev = node
+            node.next.next = temp
+            temp.prev = node.next
+            self.add_length()
+    def check_index(self,index):
+        if index == 0:
+            return 1
+        elif index == self.length - 1:
+            return -1
+        elif index > self.length - 1 or index < 0:
+            return 0
+    def prepend(self,val):
+        temp = self.head
+        self.head = Node(val)
+        self.head.next = temp
+        temp.prev = self.head
+        self.add_length()
+        return self.head.next
+    def append(self,val):
+        node = self.get(self.length-1)
+        node.next = Node(val)
+        node.next.prev = node
+        self.tail = node.next
+        self.add_length()
+    def prev_node(self,index):
+        return self.get(index-1)
+    def add_length(self):
+        self.length += 1
+    def remove_length(self):
+        self.length -= 1
+    def check_length(self):
+        if self.length == 0:
+            return -1
+    def __str__(self):
+        cur = self.head
+        parts = []
+        while cur:
+            parts.append(str(cur.val))
+            cur = cur.next
+        return " , ".join(parts)
+    def reverse(self):
+        parts = []
+        cur = self.tail
+        while cur:
+            parts.append(str(cur.val))
+            cur = cur.prev
+        return " , ".join(parts)
+    def __delattr__(self):
+        del self.head
+        del self.tail
 
+linkedlist = LinkedList(2)
+linkedlist.prepend(4)
+linkedlist.append(6)
+linkedlist.append(6)
+linkedlist.add_node(2,5)
+print(linkedlist)
 
-node1 = Node(4)
-node2 = Node(32)
-node3 = Node(4)
-node4 = Node(512)
-node5 = Node(2)
-node6 = Node(235)
-node7 = Node(12)
-# node8 = Node(25)
-
-node1.next = node2
-node1.prev = None
-node2.next = node3
-node2.prev = node1
-node3.next = node4
-node3.prev = node2
-node4.next = node5
-node4.prev = node3
-
-def call_list():
-    x = doubly_linked_list(node1)
-    print(x)
-
-call_list()
+linkedlist.remove(4)
+print(linkedlist.reverse())
+del linkedlist
+print(linkedlist)
+# print(linkedlist.get(3).prev)
+# print(linkedlist.length)
