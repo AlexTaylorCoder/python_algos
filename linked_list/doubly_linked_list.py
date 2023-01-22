@@ -7,20 +7,23 @@ class Node():
         return str(self.val)
 
 class LinkedList():
+
     def __init__(self,val):
-        self.head = Node(val)
-        self.tail = Node(val)
-        self.length = 1
+        self._head = Node(val)
+        self._tail = Node(val)
+        self._length = 1
     def get(self,index):
         if self.check_index(index) == 0:
             return "Searching at invalid position"
         else:
-            cur = self.head
+            cur = self._head
             for _ in range(index):
                 cur = cur.next
             return cur
     def remove(self,index):
-        if self.check_index(index) == 1:
+        if self._length < 1:
+            return "Nothing to delete, the linked list is empty"
+        elif self.check_index(index) == 1:
             self.remove_first()
         elif self.check_index(index) == -1:
             self.remove_last()
@@ -32,13 +35,13 @@ class LinkedList():
             node.next.prev = node
             self.remove_length()
     def remove_first(self):
-        nextNode = self.head.next
-        self.head = nextNode
+        nextNode = self._head.next
+        self._head = nextNode
         self.remove_length()
     def remove_last(self):
-        temp = self.tail.prev
-        self.tail.prev.next = None
-        self.tail = temp
+        temp = self._tail.prev
+        self._tail.prev.next = None
+        self._tail = temp
         self.remove_length()
     def add_node(self,index,val):
         if self.check_index(index) == 1:
@@ -58,34 +61,34 @@ class LinkedList():
     def check_index(self,index):
         if index == 0:
             return 1
-        elif index == self.length - 1:
+        elif index == self._length - 1:
             return -1
-        elif index > self.length - 1 or index < 0:
+        elif index > self._length - 1 or index < 0:
             return 0
     def prepend(self,val):
-        temp = self.head
-        self.head = Node(val)
-        self.head.next = temp
-        temp.prev = self.head
+        temp = self._head
+        self._head = Node(val)
+        self._head.next = temp
+        temp.prev = self._head
         self.add_length()
-        return self.head.next
+        return self._head.next
     def append(self,val):
-        node = self.get(self.length-1)
+        node = self.get(self._length-1)
         node.next = Node(val)
         node.next.prev = node
-        self.tail = node.next
+        self._tail = node.next
         self.add_length()
     def prev_node(self,index):
         return self.get(index-1)
     def add_length(self):
-        self.length += 1
+        self._length += 1
     def remove_length(self):
-        self.length -= 1
+        self._length -= 1
     def check_length(self):
-        if self.length == 0:
+        if self._length == 0:
             return -1
     def __str__(self):
-        cur = self.head
+        cur = self._head
         parts = []
         while cur:
             parts.append(str(cur.val))
@@ -93,25 +96,38 @@ class LinkedList():
         return " , ".join(parts)
     def reverse(self):
         parts = []
-        cur = self.tail
+        cur = self._tail
         while cur:
             parts.append(str(cur.val))
             cur = cur.prev
         return " , ".join(parts)
     def __delattr__(self):
-        del self.head
-        del self.tail
+        del self._head
+        del self._tail
+    def __len__(self):
+        return self._length
+    def __eq__(self, other):
+        cur = self._head
+        other_cur = other._head
+        while cur:
+            if cur.val != other_cur.val:
+                return False
+            cur = cur.next
+            other = other_cur.next
+        return True
 
 linkedlist = LinkedList(2)
+linkedlist2 = LinkedList(4)
+
+print(linkedlist == linkedlist2)
+
+
 linkedlist.prepend(4)
 linkedlist.append(6)
 linkedlist.append(6)
 linkedlist.add_node(2,5)
-print(linkedlist)
 
 linkedlist.remove(4)
-print(linkedlist.reverse())
-del linkedlist
-print(linkedlist)
+
 # print(linkedlist.get(3).prev)
 # print(linkedlist.length)
