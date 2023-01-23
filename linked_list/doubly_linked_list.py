@@ -145,8 +145,14 @@ class LinkedList():
         return found_val
     #Delete by removing pointers, Python garbage collection handles the rest
     def __delattr__(self):
-        del self._head
-        del self._tail
+        if self._head == None:
+            return "There are no nodes."
+        cur = self._head
+        while cur:
+            cur.prev = None
+            cur = cur.next
+        self._head = None
+        self._tail = None
     # len(linkedlist) == linkedlist.length
     def __len__(self):
         return self._length
@@ -212,7 +218,6 @@ class LinkedList():
         while cur:
             if not cb(cur.val):
                 check = self.check_removal(count)
-                print(check)
                 if not check:
                     self.__removal(cur.prev)
                 count -= 1
@@ -223,7 +228,12 @@ class LinkedList():
     def reduce(self,cb):
         prev = None 
         cur = self._head
+        count = 0
         while cur:
+            if not cb(cur.val):
+                check = self.check_removal(count)
+            if not check:
+                self.__removal(cur.prev)
             cur.val = cb(cur.val)
             cur = cur.next
             count += 1  
@@ -255,5 +265,5 @@ linkedlist2.prepend(2)
 
 
 linkedlist2.filter(lambda x: x != 2)
-
+del linkedlist2
 print(linkedlist2)
