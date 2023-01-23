@@ -22,6 +22,13 @@ class LinkedList():
                 cur = cur.next
             return cur
     def pop(self,index):
+        check = self.check_removal(index)
+        if check:
+            return check
+        else:
+            node = self.prev_node(index)
+            return self.__removal(node)
+    def check_removal(self,index):
         if self._length < 1:
             return "Nothing to delete, the linked list is empty"
         elif self.check_index(index) == 1:
@@ -31,8 +38,7 @@ class LinkedList():
         elif self.check_index(index) == 0:
             return "Deleting at invalid position"
         else:
-            node = self.prev_node(index)
-            return self.__removal(node)
+            return False
 
     def __removal(self,node):
         node.next = node.next.next 
@@ -192,24 +198,62 @@ class LinkedList():
             cur = cur.next
             count += 1
         return cur_a
-    def modify_all(self,cb=None):
-        count = 0
+    #Calls cb on every iteration
+    def map(self,cb):
         cur = self._head
         while cur:
             cur.val = cb(cur.val)
             cur = cur.next
+    #If doesn't meet conditions remove
+    def filter(self,cb):
+        count = 0
+        cur = self._head
+        #More complicated implementation so won't have to loop from beginning, reduces runtime from 2^n to n, not 100% on first time complexity 
+        while cur:
+            if not cb(cur.val):
+                check = self.check_removal(count)
+                print(check)
+                if not check:
+                    self.__removal(cur.prev)
+                count -= 1
+            cur = cur.next
             count += 1
+            print(self)
+    #Need to maintain temp variable
+    def reduce(self,cb):
+        prev = None 
+        cur = self._head
+        while cur:
+            cur.val = cb(cur.val)
+            cur = cur.next
+            count += 1  
 
+    #Sum
+    def sum(self):
+        count = 0
+        cur = self._head
+        while cur:
+            count += cur.val
+            cur = cur.next
+        return count
 
         
 
 
 
 linkedlist = LinkedList(2)
-linkedlist2 = LinkedList(4)
-
-
 linkedlist.append(4)
+
+linkedlist2 = LinkedList(4)
 linkedlist2.append(2)
-linkedlist2.modify_all(lambda x:x/2)
+linkedlist2.append(2)
+linkedlist2.append(5)
+linkedlist2.append(2)
+linkedlist2.prepend(3)
+linkedlist2.prepend(2)
+
+
+
+linkedlist2.filter(lambda x: x != 2)
+
 print(linkedlist2)
